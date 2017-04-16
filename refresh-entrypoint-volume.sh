@@ -17,7 +17,7 @@ done &&
     ( [ ! -z "${BRANCH}" ] || (echo There is no BRANCH defined && exit 65)) &&
     ([ ! -z "$(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.github.dot-ssh)" ] || (echo "There is no dot-ssh volume." && exit 66)) &&
     ([ ! -z "$(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.entrypoint)" ] || (echo "There is no entrypoint volume." && exit 67)) &&
-    entrypoint=$(docker volume create --label com.emorymerryman.tstamp=$(date +%s) --label com.emorymerryman.temporary) &&
+    BIN=$(docker volume create --label com.emorymerryman.tstamp=$(date +%s) --label com.emorymerryman.temporary) &&
     (cat <<EOF
 #!/bin/sh
 
@@ -35,7 +35,7 @@ EOF
     run \
     --interactive \
     --rm \
-    --volume ${entrypoint}:/usr/local/src \
+    --volume ${BIN}:/usr/local/src \
     --workdir /usr/local/src \
     alpine:3.4 \
     tee ssh &&
@@ -43,7 +43,7 @@ EOF
         run \
         --interactive \
         --rm \
-        --volume ${entrypoint}:/usr/local/src \
+        --volume ${BIN}:/usr/local/src \
         --workdir /usr/local/src \
         --entrypoint chmod \
         alpine:3.4 \
@@ -53,12 +53,12 @@ EOF
         --interactive \
         --rm \
         --volume /var/run/docker.sock:/var/run/docker.sock:ro \
-        --volume ${entrypoint}:/usr/local/entrypoint:ro \
+        --volume ${BIN}:/usr/local/bin:ro \
         --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.entrypoint):/usr/local/src \
         --workdir /usr/local/src \
         tidyrailroad/git:0.2.0 \
         fetch upstream ${BRANCH} &&
-    docker volume rm ${entrypoint} &&
+    docker volume rm ${BIN} &&
     docker \
         run \
         --interactive \
