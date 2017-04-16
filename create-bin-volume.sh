@@ -16,13 +16,13 @@ do
 done &&
     ( [ ! -z "${BRANCH}" ] || (echo There is no BRANCH defined && exit 65)) &&
     ([ ! -z "$(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.github.dot-ssh)" ] || (echo "There is no dot-ssh volume." && exit 66)) &&
-    ([ -z "$(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.entrypoint)" ] || (echo "There is already a entrypoint volume." && exit 67)) &&
-    docker volume create --label com.emorymerryman.tstamp=$(date +%s) --label com.emorymerryman.thirdplanet.structure.entrypoint &&
+    ([ -z "$(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bin)" ] || (echo "There is already a bin volume." && exit 67)) &&
+    docker volume create --label com.emorymerryman.tstamp=$(date +%s) --label com.emorymerryman.thirdplanet.structure.bin &&
     docker \
         run \
         --interactive \
         --rm \
-        --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.entrypoint):/usr/local/src \
+        --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bin):/usr/local/src \
         --workdir /usr/local/src \
         tidyrailroad/git:0.2.0 \
         init &&
@@ -30,10 +30,10 @@ done &&
         run \
         --interactive \
         --rm \
-        --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.entrypoint):/usr/local/src \
+        --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bin):/usr/local/src \
         --workdir /usr/local/src \
         tidyrailroad/git:0.2.0 \
-        remote add upstream ssh://upstream/wildwarehouse/thirdplanet.git &&
+        remote add upstream ssh://upstream/wildwarehouse/hotdog.git &&
     BIN=$(docker volume create --label com.emorymerryman.tstamp=$(date +%s) --label com.emorymerryman.temporary) &&
     (cat <<EOF
 #!/bin/sh
@@ -43,7 +43,7 @@ docker \
     --interactive \
     --rm \
     --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.github.dot-ssh):/root/.ssh:ro \
-    --volume $(docker volume ls --quiet --filter  label=com.emorymerryman.thirdplanet.structure.entrypoint):/usr/local/src \
+    --volume $(docker volume ls --quiet --filter  label=com.emorymerryman.thirdplanet.structure.bin):/usr/local/src \
     --workdir /usr/local/src \
     tidyrailroad/openssh-client:0.0.0 \
     \${@}
@@ -71,7 +71,7 @@ EOF
         --rm \
         --volume /var/run/docker.sock:/var/run/docker.sock:ro \
         --volume ${BIN}:/usr/local/bin:ro \
-        --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.entrypoint):/usr/local/src \
+        --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bin):/usr/local/src \
         --workdir /usr/local/src \
         tidyrailroad/git:0.2.0 \
         fetch upstream ${BRANCH} &&
@@ -80,7 +80,7 @@ EOF
         run \
         --interactive \
         --rm \
-        --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.entrypoint):/usr/local/src \
+        --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bin):/usr/local/src \
         --workdir /usr/local/src \
         tidyrailroad/git:0.2.0 \
         checkout upstream/${BRANCH}
