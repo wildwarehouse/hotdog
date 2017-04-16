@@ -1,6 +1,21 @@
 #!/bin/sh
 
-([ ! -z "$(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.github.dot-ssh)" ] || (echo "There is no dot-ssh volume." && exit 66)) &&
+while [ ${#} -gt 0 ]
+do
+    case ${1} in
+        --branch)
+            BRANCH=${2} &&
+                shift &&
+                shift
+        ;;
+        *)
+            echo Unknown Option: ${1} &&
+                exit 64
+        ;;
+    esac
+done &&
+    ( [ ! -z "${BRANCH}" ] || (echo There is no BRANCH defined && exit 65)) &&
+    ([ ! -z "$(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.github.dot-ssh)" ] || (echo "There is no dot-ssh volume." && exit 66)) &&
     ([ ! -z "$(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bin)" ] || (echo "There is no bin volume." && exit 67)) &&
     BIN=$(docker volume create --label com.emorymerryman.tstamp=$(date +%s) --label com.emorymerryman.temporary) &&
     (cat <<EOF
@@ -42,7 +57,7 @@ EOF
         --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bin):/usr/local/src \
         --workdir /usr/local/src \
         tidyrailroad/git:0.2.0 \
-        fetch upstream $(git rev-parse --abbrev-ref HEAD) &&
+        fetch upstream ${BRANCH} &&
     docker volume rm ${BIN} &&
     docker \
         run \
@@ -51,4 +66,4 @@ EOF
         --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bin):/usr/local/src \
         --workdir /usr/local/src \
         tidyrailroad/git:0.2.0 \
-        checkout upstream/$(git rev-parse --abbrev-ref HEAD)
+        checkout upstream/${BRANCH}
