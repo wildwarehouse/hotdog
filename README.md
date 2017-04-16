@@ -1,1 +1,1 @@
-entry point for personal projects
+This is the entry point for personal projects
