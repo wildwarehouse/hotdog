@@ -42,7 +42,7 @@ EOF
         --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bin):/usr/local/src \
         --workdir /usr/local/src \
         tidyrailroad/git:0.2.0 \
-        fetch upstream ${BRANCH} &&
+        fetch upstream $(git rev-parse --abbrev-ref HEAD) &&
     docker volume rm ${BIN} &&
     docker \
         run \
@@ -51,4 +51,4 @@ EOF
         --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bin):/usr/local/src \
         --workdir /usr/local/src \
         tidyrailroad/git:0.2.0 \
-        checkout upstream/${BRANCH}
+        checkout upstream/$(git rev-parse --abbrev-ref HEAD)
