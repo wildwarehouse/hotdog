@@ -62,7 +62,7 @@ EOF
         --rm \
         --volume ${BIN}:/usr/local/src \
         --workdir /usr/local/src \
-        --bin chmod \
+        --workdir chmod \
         alpine:3.4 \
         0500 ssh &&
     docker \
