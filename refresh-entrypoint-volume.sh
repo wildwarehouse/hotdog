@@ -19,7 +19,7 @@ done &&
     ([ ! -z "$(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.entrypoint)" ] || (echo "There is no entrypoint volume." && exit 67)) &&
     entrypoint=$(docker volume create --label com.emorymerryman.tstamp=$(date +%s) --label com.emorymerryman.temporary) &&
     (cat <<EOF
-#!/entrypoint/sh
+#!/bin/sh
 
 docker \
     run \
