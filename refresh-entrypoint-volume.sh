@@ -1,4 +1,4 @@
-#!/entrypoint/sh
+#!/bin/sh
 
 while [ ${#} -gt 0 ]
 do
