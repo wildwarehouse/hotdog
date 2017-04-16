@@ -30,7 +30,7 @@ done &&
         run \
         --interactive \
         --rm \
-        --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bint):/usr/local/src \
+        --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bin):/usr/local/src \
         --workdir /usr/local/src \
         tidyrailroad/git:0.2.0 \
         remote add upstream ssh://upstream/wildwarehouse/thirdplanet.git &&
@@ -43,7 +43,7 @@ docker \
     --interactive \
     --rm \
     --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.github.dot-ssh):/root/.ssh:ro \
-    --volume $(docker volume ls --quiet --filter  label=com.emorymerryman.thirdplanet.structure.bint):/usr/local/src \
+    --volume $(docker volume ls --quiet --filter  label=com.emorymerryman.thirdplanet.structure.bin):/usr/local/src \
     --workdir /usr/local/src \
     tidyrailroad/openssh-client:0.0.0 \
     \${@}
@@ -62,7 +62,7 @@ EOF
         --rm \
         --volume ${BIN}:/usr/local/src \
         --workdir /usr/local/src \
-        --bint chmod \
+        --bin chmod \
         alpine:3.4 \
         0500 ssh &&
     docker \
@@ -71,7 +71,7 @@ EOF
         --rm \
         --volume /var/run/docker.sock:/var/run/docker.sock:ro \
         --volume ${BIN}:/usr/local/bin:ro \
-        --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bint):/usr/local/src \
+        --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bin):/usr/local/src \
         --workdir /usr/local/src \
         tidyrailroad/git:0.2.0 \
         fetch upstream ${BRANCH} &&
@@ -80,7 +80,7 @@ EOF
         run \
         --interactive \
         --rm \
-        --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bint):/usr/local/src \
+        --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bin):/usr/local/src \
         --workdir /usr/local/src \
         tidyrailroad/git:0.2.0 \
         checkout upstream/${BRANCH}

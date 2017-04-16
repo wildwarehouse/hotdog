@@ -6,7 +6,7 @@ docker \
     --interactive \
     --rm \
     --env DISPLAY \
-    --env ENTRYPOINT=$(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.entrypoint) \
+    --env BIN=$(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bin) \
     --volume /var/run/docker.sock:/var/run/docker.sock:ro \
     --volume $(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.entrypoint):/usr/local/src \
     --workdir /usr/local/src \
