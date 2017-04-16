@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ([ ! -z "$(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.github.dot-ssh)" ] || (echo "There is no dot-ssh volume." && exit 66)) &&
-    ([ -z "$(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bin)" ] || (echo "There is already a bin volume." && exit 67)) &&
+    ([ ! -z "$(docker volume ls --quiet --filter label=com.emorymerryman.thirdplanet.structure.bin)" ] || (echo "There is no bin volume." && exit 67)) &&
     BIN=$(docker volume create --label com.emorymerryman.tstamp=$(date +%s) --label com.emorymerryman.temporary) &&
     (cat <<EOF
 #!/bin/sh
